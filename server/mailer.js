@@ -10,6 +10,13 @@ function getSMTPConfig(email) {
     
     // Common email provider configurations
     const providers = {
+        // Added vidpace.com domain configuration
+'vidpace.com': {
+    host: 'mail.privateemail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true
+}
         // Gmail
         'gmail.com': {
             host: 'smtp.gmail.com',
