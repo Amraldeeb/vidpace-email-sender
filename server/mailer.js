@@ -17,8 +17,8 @@ async function sendEmail(emailData) {
         // Create transporter with SMTP configuration for Namecheap Private Email
         const transporter = nodemailer.createTransporter({
             host: 'mail.privateemail.com',
-            port: 587, // Use 587 for TLS or 465 for SSL
-            secure: false, // true for 465, false for other ports
+            port: 465, // Use 587 for TLS or 465 for SSL
+            secure: true, // true for 465, false for other ports
             auth: {
                 user: emailData.auth.user,
                 pass: emailData.auth.pass
