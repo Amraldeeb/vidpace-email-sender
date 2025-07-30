@@ -36,18 +36,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Send email functionality
-    emailForm.addEventListener('submit', async function(e) {
+    sendBtn.addEventListener('click', async function(e) {
         e.preventDefault();
         
-        const formData = new FormData(emailForm);
+        // Get form data directly from form elements
         const emailData = {
-            senderEmail: formData.get('senderEmail'),
-            senderPassword: formData.get('senderPassword'),
-            recipientEmail: formData.get('recipientEmail'),
-            recipientName: formData.get('recipientName'),
-            subject: formData.get('subject'),
-            emailBody: formData.get('emailBody')
+            senderEmail: document.getElementById('senderEmail').value,
+            senderPassword: document.getElementById('senderPassword').value,
+            recipientEmail: document.getElementById('recipientEmail').value,
+            recipientName: document.getElementById('recipientName').value,
+            subject: document.getElementById('subject').value,
+            emailBody: document.getElementById('emailBody').value
         };
+
+        console.log('Email data:', { ...emailData, senderPassword: '[HIDDEN]' });
 
         // Validate form data
         if (!validateEmailData(emailData)) {
@@ -63,6 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
         sendBtn.textContent = '📤 Sending...';
 
         try {
+            console.log('Making API request to:', `${API_BASE_URL}/api/send-email`);
+            
             const response = await fetch(`${API_BASE_URL}/api/send-email`, {
                 method: 'POST',
                 headers: {
@@ -71,18 +75,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(emailData)
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
             const result = await response.json();
+            console.log('Response data:', result);
 
             if (response.ok) {
                 showStatus('✅ Email sent successfully!', 'success');
-                emailForm.reset();
+                // Don't reset form to preserve data for testing
                 previewSection.style.display = 'none';
             } else {
                 showStatus(`❌ Error: ${result.error || 'Failed to send email'}`, 'error');
             }
         } catch (error) {
             console.error('Error sending email:', error);
-            showStatus('❌ Network error. Please check your connection and try again.', 'error');
+            showStatus(`❌ Network error: ${error.message}. Please check your connection and try again.`, 'error');
         } finally {
             sendBtn.disabled = false;
             sendBtn.textContent = '📤 Send Email';
