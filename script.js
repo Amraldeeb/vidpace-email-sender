@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusMessage = document.getElementById('statusMessage');
 
     // Backend API URL - Update this when deploying
-    const API_BASE_URL = 'http://localhost:3000'; // Updated to point to local backend
+  const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://vidpace-email-sender.vercel.app/'
+  : 'http://localhost:3000'
 
     // Preview email functionality
     previewBtn.addEventListener('click', function() {
